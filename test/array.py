@@ -6,8 +6,8 @@ base_url = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery
 save_dir = "Z:/Piper/get-earth/images/"
 
 # co-ordinates
-x1, y1 = 1, 1
-x2, y2 = 5, 5
+x1, y1 = 835, 1415 
+x2, y2 = 840,   1420 
 
 xdist = x2 - x1
 ydist = y2 - y1
@@ -30,18 +30,42 @@ for i in range(xdist):
 
 # stich the images
 
+# for i in range(xdist):
+#     horImgs = None
+#     # horizontal stitches
+#     for j in range(ydist):
+#         if j == 0:
+            # horImgs = cv2.imread(save_dir + file_name)
+            # print(file_name)
+        
+#         else:
+#             newImg = cv2.imread(save_dir + file_name)
+#             addImg = np.concatenate((horImgs, newImg),axis=1)
+#             horImgs = addImg
+
+#     # vertical stitches
+#     if i == 0:
+#         newVImg = horImgs
+#     else:
+#         addVImg = np.concatenate((newVImg, horImgs),axis=0)
+#         newVImg = addVImg
+
+# # write image
+# cv2.imwrite((save_dir + "stitched.jpg"),newVImg)
+
+
 for i in range(xdist):
     horImgs = None
-    # horizontal stitches
     for j in range(ydist):
+        file_name = str(x1 + i) + "_" + str(y1 + j) + ".png"
         if j == 0:
             horImgs = cv2.imread(save_dir + file_name)
-        
+            print(file_name)
         else:
             newImg = cv2.imread(save_dir + file_name)
             addImg = np.concatenate((horImgs, newImg),axis=1)
             horImgs = addImg
-
+        
     # vertical stitches
     if i == 0:
         newVImg = horImgs

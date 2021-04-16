@@ -15,6 +15,7 @@ base_url = "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery
 # ydist = y2 - y1
 
 class GetEarth():
+
     def __init__(self, p1, p2, dir):
         self.p1 = p1
         self.p2 = p2
@@ -35,7 +36,11 @@ class GetEarth():
         if not os.path.isdir(self.directory_path):
             os.mkdir(self.directory_path) 
 
-    def fetch_image(self):
+        # self.x2 = self.x2 + 1
+        # self.y2 = self.y2 + 1
+
+    # fetch images
+    def fetch_images(self):
         for i in range(self.xdist):
             for j in range(self.ydist):
                 url = base_url + str(self.x1 + i) + "/" + str(self.y1 + j)
@@ -50,33 +55,33 @@ class GetEarth():
                 print("Saved Image Tile:" + file_name)
                 file.close()
 
+
+
+    # stitch images
     def stitch_images(self):
         for i in range(self.xdist):
-
-            # horizontal stitches
-            horizontal_images = None
+            horImgs = None
             for j in range(self.ydist):
-                # file name
                 file_name = str(self.x1 + i) + "_" + str(self.y1 + j) + ".png"
-                file_full_path = os.path.join(self.directory_path, file_name)
                 if j == 0:
-                    horizontal_images = cv2.imread(file_full_path)
-                
+                    horImgs = cv2.imread(self.directory_path +"\\" + file_name)
                 else:
-                    new_hort_image = cv2.imread(file_full_path)
-                    add_new_image = np.concatenate((horizontal_images, new_hort_image), axis=1)
-                    horizontal_images = add_new_image
-            
+                    newImg = cv2.imread(self.directory_path +"\\" + file_name)
+                    # print(self.directory_path +"\\" +  file_name)
+                    addImg = np.concatenate((horImgs, newImg),axis=1)
+                    horImgs = addImg
             # vertical stitches
             if i == 0:
-                new_vert_image = horizontal_images
-            
+                newVImg = horImgs
+                # break
             else:
-                add_new_vert_img = np.concatenate((new_vert_image, horizontal_images),axis=0)
-                new_vert_img = add_new_vert_img
+                addVImg = np.concatenate((newVImg, horImgs),axis=0)
+                newVImg = addVImg
+
+            print("Verticle Distance:" + str(self.x1 + i))
 
         # write image
-        stitch_file_name = str(self.x1) + "_" + str(self.y1)  + "_" +str(self.x2)+ "_" + str(self.y2) + "_" + "stitched.jpg"
-        # print(self.directory_path + "/"+ stitch_file_name)
-        cv2.imwrite((self.directory_path +"/"+ stitch_file_name), new_vert_image)
+        img_file_name =  str(self.x1) + "_" + str(self.y1) +"_"+ str(self.x2) + "_" + str(self.y2) +"_stitched.jpg"
+        cv2.imwrite((self.directory_path +"\\" +img_file_name),newVImg)
+        print("Image File written: " + img_file_name)
 
