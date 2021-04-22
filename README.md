@@ -1,6 +1,5 @@
 # get-earth
-Get high res sat image of earth and stitch them.
-The data is sourced from [zoom.earth](https://zoom.earth/)
+Get high res sat image of earth and stitch them.The data is sourced from [zoom.earth](https://zoom.earth/). 100 x 100 tiles give you you a total of 10000 individual tiles and when its all stitched together it totally give you a 25k x 25k image. So try not to go over 100 x 100 tiles.
 
 ## How to use it?
 1. Import the `get_earth.GetEarth` module to your file.
